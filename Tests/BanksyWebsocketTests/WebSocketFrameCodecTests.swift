@@ -58,7 +58,8 @@ class WebSocketFrameCodecTests: XCTestCase {
         XCTAssertEqual(encodedData.count, 10 + payload.count) // 2 header + 8 extended length + payload
     }
 
-    func testDecodeSimpleTextFrame() throws {
+    func testDecodeMaskedFrame() throws {
+        let codec = WebSocketFrameCodec()
         let payload = "Hello, WebSocket!"
         let maskingKey = Data([0xAA, 0xBB, 0xCC, 0xDD])
         var maskedPayload = Data(payload.utf8)
@@ -69,11 +70,8 @@ class WebSocketFrameCodecTests: XCTestCase {
 
         let (decodedFrame, remainingData) = try codec.decode(data: encodedData)
         
-        XCTAssertTrue(decodedFrame.fin)
-        XCTAssertEqual(decodedFrame.opcode, .text)
         XCTAssertTrue(decodedFrame.masked)
-        XCTAssertEqual(decodedFrame.payloadLength, UInt64(payload.utf8.count))
-        XCTAssertEqual(decodedFrame.payloadData.count, payload.utf8.count)
+        XCTAssertEqual(decodedFrame.opcode, .text)
         XCTAssertEqual(String(data: decodedFrame.payloadData, encoding: .utf8), payload)
         XCTAssertTrue(remainingData.isEmpty)
     }

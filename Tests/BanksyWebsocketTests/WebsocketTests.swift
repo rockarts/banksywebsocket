@@ -40,11 +40,29 @@ class WebSocketTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Receive echoed message")
         
         Task {
+            var messageCount = 0
             for try await message in await webSocket.messages {
-                if case .string(let receivedText) = message {
-                    XCTAssertEqual(receivedText, testMessage)
-                    expectation.fulfill()
-                    break
+                messageCount += 1
+                switch message {
+                case .string(let receivedText):
+                    print("Received string message: \(receivedText)")
+                    // This is likely the first message from the server
+                    XCTAssertTrue(receivedText.contains("Request served by"))
+                case .data(let receivedData):
+                    print("Received data message: \(receivedData)")
+                    // This is likely our echoed message
+                    if let receivedText = String(data: receivedData, encoding: .utf8) {
+                        XCTAssertEqual(receivedText, testMessage)
+                        expectation.fulfill()
+                    } else {
+                        XCTFail("Couldn't decode received data as UTF-8")
+                    }
+                @unknown default:
+                    XCTFail("Received unknown message type")
+                }
+                
+                if messageCount >= 2 {
+                    break  // Exit after processing both expected messages
                 }
             }
         }

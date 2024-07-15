@@ -227,11 +227,7 @@ public struct WebSocketFrameCodec {
     }
     
     private func applyMask(to data: Data, withKey key: Data) -> Data {
-        precondition(key.count == 4, "Masking key must be 4 bytes long")
-        let keyArray = [UInt8](key)
-        return Data(data.enumerated().map { (index, byte) in
-            return byte ^ keyArray[index % 4]
-        })
+        return WebSocketMask.applyMask(to: data, withKey: key)
     }
     
     func validateUTF8(_ data: Data) throws {
