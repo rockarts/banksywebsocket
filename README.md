@@ -2,7 +2,7 @@ A Swift client implementation of the RFC 6455 Websocket Standard
 
 
 Frame Structure
-
+```
 0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-------+-+-------------+-------------------------------+
@@ -21,6 +21,7 @@ Frame Structure
 + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
 |                     Payload Data continued ...                |
 +---------------------------------------------------------------+
+```
 
 Field Descriptions:
 a. FIN (1 bit): Indicates if this is the final fragment in a message. The first fragment may also be the final fragment.
