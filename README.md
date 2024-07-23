@@ -28,12 +28,12 @@ a. FIN (1 bit): Indicates if this is the final fragment in a message. The first 
 b. RSV1, RSV2, RSV3 (1 bit each): Reserved bits. Must be 0 unless an extension is negotiated that defines meanings for non-zero values.
 c. Opcode (4 bits): Defines the interpretation of the payload data:
 
-0x0: Continuation frame
-0x1: Text frame
-0x2: Binary frame
-0x8: Connection close
-0x9: Ping
-0xA: Pong
+- 0x0: Continuation frame
+- 0x1: Text frame
+- 0x2: Binary frame
+- 0x8: Connection close
+- 0x9: Ping
+- 0xA: Pong
 Other values are reserved for future use
 
 d. Mask (1 bit): Indicates whether the payload data is masked. If set to 1, a masking key is present in masking-key, and this is used to unmask the payload data.
